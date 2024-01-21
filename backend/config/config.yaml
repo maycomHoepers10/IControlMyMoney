@@ -1,0 +1,4 @@
+database:
+  url: "postgres://postgres:111111@localhost:5432/home_money?sslmode=disable"
+jwt:
+  secret: "test123123"

@@ -1,0 +1,49 @@
+-- Comando para criar o banco de dados (substitua 'nome_do_banco' pelo nome desejado)
+CREATE DATABASE HOME_MONEY; //Dinheiro de casa
+
+-- Criação da tabela de Usuários
+CREATE TABLE Users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    permission INT NOT NULL
+);
+
+-- Criação da tabela de Contas Financeiras
+CREATE TABLE FinancialAccounts (
+    account_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    account_name VARCHAR(255) NOT NULL,
+    balance NUMERIC(10, 2) NOT NULL
+);
+
+-- Criação da tabela de Transações com indicador de entrada/saída
+CREATE TABLE Transactions (
+    transaction_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    account_id INT REFERENCES FinancialAccounts(account_id),
+    date DATE NOT NULL,
+    transaction_type VARCHAR(10) NOT NULL, -- 'income' ou 'expense'
+    category_id INT REFERENCES Categories(category_id),
+    amount NUMERIC(10, 2) NOT NULL,
+    description TEXT
+);
+
+-- Criação da tabela de Categorias
+CREATE TABLE Categories (
+    category_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    category_name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Criação da tabela de Orçamentos
+CREATE TABLE Budgets (
+    budget_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    category_id INT REFERENCES Categories(category_id),
+    budget_amount NUMERIC(10, 2) NOT NULL,
+    year INT NOT NULL,
+    month INT NOT NULL
+);
